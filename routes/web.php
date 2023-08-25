@@ -1,5 +1,4 @@
 <?php
-
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\UserController;
 
@@ -33,6 +32,32 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__.'/auth.php';
 
+//use Illuminate\Http\Request
+// //http://127.0.0.1:8000/product?name=bbb
+// Route::get('product', function(Request $request){
+//     echo 'Product List'. $request->query('name');
+// });
+
+// //http://127.0.0.1:8000/user/detail/13/nguyenvana
+// //http://127.0.0.1:8000/user/detail/13/
+// Route::get('user/detail/{id}/{name?}', function($id, $name = ''){
+//     return 'User Detail: '.$id. $name;
+// });
+// Route::get('master', function () {
+//     return view('client.layout.master');
+// });
+// Route::get('product', function () {
+//     return view('client.pages.product.list');
+// });
+// Route::get('blog', function () {
+//     return view('client.pages.blog.detail');
+// });
+
+
 Route::get('admin/product', [ProductController::class, 'index']);
 
 Route::get('admin/user', [UserController::class, 'index']);
+
+Route::get('master', function () {
+    return view('client.layout.master');
+});
