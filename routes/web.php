@@ -1,4 +1,5 @@
 <?php
+
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\ProductCategory;
@@ -31,7 +32,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
 
 //use Illuminate\Http\Request
 // //http://127.0.0.1:8000/product?name=bbb
@@ -62,7 +63,7 @@ Route::get('master', function () {
 });
 
 
-Route::prefix('admin')->name('admin.')->group(function(){
+Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('product', [ProductController::class, 'index'])->name('product.list');
 
     Route::get('user', [UserController::class, 'index'])->name('user.list');
@@ -72,4 +73,6 @@ Route::prefix('admin')->name('admin.')->group(function(){
     Route::get('product_category/add', [ProductCategory::class, 'add'])->name('product_category.add');
 
     Route::post('product_category/store', [ProductCategory::class, 'store'])->name('product_category.store');
+
+    Route::get('product_category/{id}', [ProductCategory::class, 'detail'])->name('product_category.detail');
 });
