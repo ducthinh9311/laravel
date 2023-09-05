@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use App\Http\Requests\StoreProductCategoryRequest;
+use App\Http\Requests\UpdateProductCategoryRequest;
 
 class ProductCategory extends Controller
 {
@@ -15,42 +17,42 @@ class ProductCategory extends Controller
         $productCategories = DB::select('select * from product_categories order by created_at desc');
         return view('admin.pages.product_category.list', ['productCategories' => $productCategories]);
     }
-
     public function add()
     {
         return view('admin.pages.product_category.create');
     }
 
-    public function store(Request $request)
+    public function store(StoreProductCategoryRequest $request)
     {
-
-        $request->validate(
-            [
-                'name' => 'required|min:3|max:255|unique:product_categories,name',
-                'status' => 'required'
-            ],
-            [
-                'name.required' => 'Ten buoc phai nhap',
-                'name.min' => 'Ten phai tren 3 ky tu',
-                'name.max' => 'Ten phai duoi 255 ky tu',
-                'status.required' => 'Trang thai buoc phai chon',
-            ]
-        );
-
         $bool = DB::insert('insert into product_categories (name, status, created_at, updated_at) values (?, ?, ?, ?)', [
             $request->name,
             $request->status,
             Carbon::now()->addDays(999)->addMonth()->addYear(),
             Carbon::now()
         ]);
-        $message = $bool ? 'Success' : 'that bai';
+        $message = $bool ? 'Tao thanh cong' : 'Tao that bai';
 
         //session flash
         return redirect()->route('admin.product_category.list')->with('message', $message);
     }
 
-    public function detail()
+    public function detail($id)
     {
-        dd(1);
+        $productCategory = DB::select('select * from product_categories where id = ?', [$id]);
+        return view('admin.pages.product_category.detail', ['productCategory' => $productCategory[0]]);
+    }
+    public function update(UpdateProductCategoryRequest $request, $id)
+    {
+        //UPDATE `product_categories` SET name='', status='' WHREe id=1;
+        $check = DB::update('UPDATE `product_categories` SET name = ? , status = ? where id = ?', [$request->name, $request->status, $id]);
+        $message = $check > 0 ? 'Cap Nhat Thanh Cong' : 'Cap Nhat That Bai';
+        //session flash
+        return redirect()->route('admin.product_category.list')->with('message', $message);
+    }
+    public function destroy($id)
+    {
+        $check = DB::delete('DELETE from product_categories WHERE id = ?', [$id]);
+        $message = $check > 0 ? 'Xoa Thanh Cong' : 'Xoa That Bai';
+        return redirect()->route('admin.product_category.list')->with('message', $message);
     }
 }
