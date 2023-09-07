@@ -12,10 +12,27 @@ use App\Http\Requests\UpdateProductCategoryRequest;
 class ProductCategory extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
-        $productCategories = DB::select('select * from product_categories order by created_at desc');
-        return view('admin.pages.product_category.list', ['productCategories' => $productCategories]);
+        $keyword = $request->keyword;
+        // $sortBy = $request->sortBy ?? 'latest';
+        // $sort = $sortBy === 'oldest' ? 'asc' : 'desc';
+        // $page = $_GET['page'] ?? 1;
+        $page = $request->page ?? 1;
+        $itemPerPage = 2;
+        $offset = ($page - 1) * $itemPerPage;
+        $productCategories = DB::select(
+            'select * from product_categories where name like ? order by created_at desc limit ?,?',
+            ['%' . $keyword . '%', $offset, $itemPerPage]
+        );
+        $totalRecords = DB::select('select count(*) as sum from product_categories')[0]->sum;
+
+        $totalPages = ceil($totalRecords / $itemPerPage);
+
+        return view(
+            'admin.pages.product_category.list',
+            ['productCategories' => $productCategories, 'totalPages' => $totalPages, 'currentPage' => $page, 'keyword' => $keyword]
+        );
     }
     public function add()
     {

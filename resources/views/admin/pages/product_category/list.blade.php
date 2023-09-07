@@ -33,9 +33,20 @@
                             <div class="card-header">
                                 <div class="row">
                                     <div class="col-md-6">
-                                        {{-- <h3 class="card-title">Bordered Table</h3> --}}
+                                        <h3 class="card-title">
+                                            <form method="get">
+                                                <input type="text" value="{{ $keyword }}" placeholder="Search...."
+                                                    name="keyword">
+                                                <select name="sortBy">
+                                                    <option value="">---Please Select---</option>
+                                                    <option value="">Latest</option>
+                                                    <option value="">Oldest</option>
+                                                </select>
+                                                <button class="btn btn-primary" type="submit">Search</button>
+                                            </form>
+                                        </h3>
                                     </div>
-                                    <div class="col-md-12 text-left ">
+                                    <div class="col-md-12 text-right ">
                                         <a class="btn btn-primary" href="{{ route('admin.product_category.add') }}">Add</a>
                                         @csrf
                                     </div>
@@ -85,9 +96,11 @@
                             <div class="card-footer clearfix">
                                 <ul class="pagination pagination-sm m-0 float-right">
                                     <li class="page-item"><a class="page-link" href="#">&laquo;</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                    @for ($i = 1; $i <= $totalPages; $i++)
+                                        <li class="page-item {{ $i == $currentPage ? 'active' : '' }}"><a class="page-link"
+                                                href="?page={{ $i }}">{{ $i }}</a>
+                                        </li>
+                                    @endfor
                                     <li class="page-item"><a class="page-link" href="#">&raquo;</a></li>
                                 </ul>
                             </div>
