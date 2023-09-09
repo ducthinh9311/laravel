@@ -88,6 +88,9 @@
     <script src="{{ asset('assets/admin/dist/js/pages/dashboard.js') }}"></script>
     <!-- AdminLTE for demo purposes -->
     <script src="{{ asset('assets/admin/dist/js/demo.js') }}"></script>
+    <!-- ckeditor5 -->
+    <script src="https://cdn.ckeditor.com/ckeditor5/39.0.2/classic/ckeditor.js"></script>
+    @yield('js-custom')
 </body>
 
 </html>

@@ -64,19 +64,19 @@ Route::get('master', function () {
 
 
 Route::prefix('admin')->name('admin.')->group(function () {
-    Route::get('product', [ProductController::class, 'index'])->name('product.list');
 
+    //user
     Route::get('user', [UserController::class, 'index'])->name('user.list');
 
+    //product category
     Route::get('product_category', [ProductCategory::class, 'index'])->name('product_category.list');
-
     Route::get('product_category/add', [ProductCategory::class, 'add'])->name('product_category.add');
-
     Route::post('product_category/store', [ProductCategory::class, 'store'])->name('product_category.store');
-
     Route::get('product_category/{id}', [ProductCategory::class, 'detail'])->name('product_category.detail');
-
     Route::post('product_category/update{id}', [ProductCategory::class, 'update'])->name('product_category.update');
-
     Route::get('produc_category/destroy{id}', [ProductCategory::class, 'destroy'])->name('product_category.destroy');
+
+    //product
+    // Route::get('product', [ProductController::class, 'index'])->name('product.list');
+    Route::resource('product', ProductController::class);
 });
