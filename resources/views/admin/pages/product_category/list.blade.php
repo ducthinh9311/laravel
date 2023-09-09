@@ -39,9 +39,9 @@
                                                     name="keyword">
                                                 <select name="sortBy">
                                                     <option value="">---Please Select---</option>
-                                                    <option {{ $sortBy === 'latest' ? 'selected' : '' }} value="">
+                                                    <option {{ $sortBy === 'latest' ? 'selected' : '' }} value="latest">
                                                         Latest</option>
-                                                    <option {{ $sortBy === 'latest' ? 'selected' : '' }} value="">
+                                                    <option {{ $sortBy === '    oldest' ? 'selected' : '' }} value="oldest">
                                                         Oldest</option>
                                                 </select>
                                                 <button class="btn btn-primary" type="submit">Search</button>
@@ -82,7 +82,7 @@
                                                 <td>
                                                     <a href="{{ route('admin.product_category.detail', ['id' => $productCategory->id]) }}"
                                                         class="btn btn-primary">Detail</a>
-                                                    <a onclick="return confirm('Are You Sure')" class="btn btn-danger"
+                                                    <a onclick="return confirm('Are You Sure?')" class="btn btn-danger"
                                                         href="{{ route('admin.product_category.destroy', ['id' => $productCategory->id]) }}">Delete</a>
                                                 </td>
                                             </tr>

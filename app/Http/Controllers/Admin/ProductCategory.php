@@ -14,10 +14,11 @@ class ProductCategory extends Controller
 
     public function index(Request $request)
     {
-        $keyword = $request->keyword;
+        $keyword = $request->keyword ?? '';
         $sortBy = $request->sortBy ?? 'latest';
-        $sort = $sortBy === 'oldest' ? 'asc' : 'desc';
+        $sort = ($sortBy === 'oldest') ? 'asc' : 'desc';
         // $page = $_GET['page'] ?? 1;
+
         $page = $request->page ?? 1;
         $itemPerPage = 2;
         $offset = ($page - 1) * $itemPerPage;
