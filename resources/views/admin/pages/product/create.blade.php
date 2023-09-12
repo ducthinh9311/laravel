@@ -42,7 +42,7 @@
                                 </div>
                             @endif --}}
                             <!-- form start -->
-                            <form role="form" method="post" action="{{ route('admin.product_category.store') }}">
+                            <form role="form" method="post" action="{{ route('admin.product.store') }}">
                                 @csrf
                                 <div class="card-body">
                                     <div class="form-group">
@@ -79,22 +79,15 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="short_description">Short Description</label>
-                                        <div id="short_description">
-                                            {{-- <input value="{{ old('short_description') }}" type="text"
-                                                name="short_description" class="form-control" id="name"
-                                                placeholder="Describe yourself here..."> --}}
-                                        </div>
+                                        <textarea placeholder="Describe yourself here..." class="form-control" name="short_description" id="short_description"></textarea>
                                         @error('short_description')
                                             <div class="alert alert-danger">{{ $message }}</div>
                                         @enderror
                                     </div>
                                     <div class="form-group">
                                         <label for="description">Description</label>
-                                        <div id="description">
-                                            {{-- <input value="{{ old('name') }}" type="text-area" name="description"
-                                                class="form-control" id="description"
-                                                placeholder="Describe yourself here..."> --}}
-                                        </div>
+                                        <textarea placeholder="Describe yourself here..." class="form-control" name="description" id="description"></textarea>
+
                                         @error('description')
                                             <div class="alert alert-danger">{{ $message }}</div>
                                         @enderror
@@ -162,6 +155,7 @@
                                     <div class="card-footer">
                                         <button type="submit" class="btn btn-primary">Create</button>
                                     </div>
+                                    @csrf
                             </form>
                         </div>
                         <!-- /.card -->
@@ -179,13 +173,30 @@
                                 .catch(error => {
                                     console.error(error);
                                 });
+                            ClassicEditor
+                                .create(document.querySelector('#information'))
+                                .catch(error => {
+                                    console.error(error);
+                                });
                         </script>
                         <script type="text/javascript">
                             //selector jQuery = $('')
                             $(document).ready(function() {
                                 $('#name').on('keyup', function() {
-                                    var name = $('name').val();
-                                    console.log('name', name);
+                                    var name = $('#name').val();
+
+
+                                    $.ajax({
+                                        method: "POST", //method form
+                                        url: "{{ route('admin.product.create.slug') }}", //action form
+                                        data: {
+                                            'name': name,
+                                            '_token': '{{ csrf_token() }}'
+                                        },
+                                        success: function(response) {
+                                            $('#slug').val(response.slug);
+                                        }
+                                    });
                                 });
                             });
                         </script>

@@ -79,4 +79,5 @@ Route::prefix('admin')->name('admin.')->group(function () {
     //product
     // Route::get('product', [ProductController::class, 'index'])->name('product.list');
     Route::resource('product', ProductController::class);
+    Route::post('product/slug', [ProductController::class, 'createSlug'])->name('product.create.slug');
 });

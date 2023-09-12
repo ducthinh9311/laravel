@@ -5,6 +5,10 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
+use App\Http\Requests\StoreProductRequest;
+use Carbon\Carbon;
+
 
 class ProductController extends Controller
 {
@@ -13,7 +17,9 @@ class ProductController extends Controller
      */
     public function index()
     {
-        return view('admin.pages.product.list');
+        //Qury Builder
+        $products = DB::table('products')->paginate(1); //pagination page
+        return view('admin.pages.product.list', ['products' => $products]);
     }
 
     /**
@@ -28,9 +34,32 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreProductRequest $request)
     {
-        //
+        // dd($request->all());
+        // DB::select("insert into product ('name') VALUE (?)", [$request->name]);
+
+        //Query Builder
+        $check = DB::table('products')->insert([
+            "name" => $request->name,
+            "slug" => $request->slug,
+            "price" => $request->price,
+            "discount_price" => $request->discount_price,
+            "short_description" => $request->short_description,
+            "information" => $request->information,
+            "description" => $request->description,
+            "qty" => $request->qty,
+            "shipping" => $request->shipping,
+            "weight" => $request->weight,
+            "status" => $request->status,
+            "product_category_id" => $request->product_category_id,
+            "created_at" => Carbon::now(),
+            "updated_at" => Carbon::now()
+        ]);
+
+        $message = $check ? 'tao san pham thanh cong' : 'tao san pham that bai';
+
+        return redirect()->route('admin.product.index')->with('message', $message);
     }
 
     /**
@@ -63,5 +92,17 @@ class ProductController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+    public function createSlug(Request $request)
+    {
+        // $name = $request->name;
+        // // $name = implode('-', explode(' ', $name));
+        // // $name = str_replace(' ', '-', trim($name));
+        // // $name = 'nguyen-van-a';
+        // return response()->json(['slug' => $name]);
+        // // dd($request->all());
+
+        //Helper string
+        return response()->json(['slug' => Str::slug($request->name, '-')]);
     }
 }
