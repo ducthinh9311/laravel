@@ -42,13 +42,13 @@
                                 </div>
                             @endif --}}
                             <!-- form start -->
-                            <form role="form" method="post" action="{{ route('admin.product.store') }}"
+                            <form role="form" method="post" action="{{ route('admin.product.detail') }}"
                                 enctype="multipart/form-data">
                                 @csrf
                                 <div class="card-body">
                                     <div class="form-group">
                                         <label for="name">Name</label>
-                                        <input value="{{ old('name') }}" type="text" name="name"
+                                        <input value="{{ $product->name }}" type="text" name="name"
                                             class="form-control" id="name" placeholder="Enter name">
                                         @error('name')
                                             <div class="alert alert-danger">{{ $message }}</div>
@@ -56,7 +56,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="slug">Slug</label>
-                                        <input value="{{ old('slug') }}" type="text" name="slug"
+                                        <input value="{{ $product->slug }}" type="text" name="slug"
                                             class="form-control" id="slug" placeholder="a-b-c">
                                         @error('slug')
                                             <div class="alert alert-danger">{{ $message }}</div>
@@ -64,7 +64,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="price">Price</label>
-                                        <input value="{{ old('price') }}" type="text" name="price"
+                                        <input value="{{ $product->price }}" type="text" name="price"
                                             class="form-control" id="price" placeholder="123">
                                         @error('price')
                                             <div class="alert alert-danger">{{ $message }}</div>
@@ -72,7 +72,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="discount_price">Discout Price</label>
-                                        <input value="{{ old('discount_price') }}" type="number" name="discount_price"
+                                        <input value="{{ $product->discount_price }}" type="number" name="discount_price"
                                             class="form-control" id="discount_price" placeholder="123">
                                         @error('discount_price')
                                             <div class="alert alert-danger">{{ $message }}</div>
@@ -80,14 +80,14 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="short_description">Short Description</label>
-                                        <textarea placeholder="Describe yourself here..." class="form-control" name="short_description" id="short_description"></textarea>
+                                        <textarea placeholder="Describe yourself here..." class="form-control" name="short_description" id="short_description">{{ $product->short_description }}</textarea>
                                         @error('short_description')
                                             <div class="alert alert-danger">{{ $message }}</div>
                                         @enderror
                                     </div>
                                     <div class="form-group">
                                         <label for="description">Description</label>
-                                        <textarea placeholder="Describe yourself here..." class="form-control" name="description" id="description"></textarea>
+                                        <textarea placeholder="Describe yourself here..." class="form-control" name="description" id="description">{{ $product->description }}</textarea>
 
                                         @error('description')
                                             <div class="alert alert-danger">{{ $message }}</div>
@@ -95,14 +95,14 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="information">Information</label>
-                                        <textarea placeholder="Describe yourself here..." class="form-control" name="information" id="information"></textarea>
+                                        <textarea placeholder="Describe yourself here..." class="form-control" name="information" id="information">{{ $product->information }}</textarea>
                                         @error('information')
                                             <div class="alert alert-danger">{{ $message }}</div>
                                         @enderror
                                     </div>
                                     <div class="form-group">
                                         <label for="qty">Qty</label>
-                                        <input value="{{ old('qty') }}" type="text" name="qty"
+                                        <input value="{{ $product->qty }}" type="text" name="qty"
                                             class="form-control" id="qty" placeholder="123">
                                         @error('qty')
                                             <div class="alert alert-danger">{{ $message }}</div>
@@ -110,14 +110,14 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="shipping">Shipping</label>
-                                        <textarea placeholder="Describe yourself here..." class="form-control" name="shipping" id="shipping"></textarea>
+                                        <textarea placeholder="Describe yourself here..." class="form-control" name="shipping" id="shipping">{{ $product->shipping }}</textarea>
                                         @error('shipping')
                                             <div class="alert alert-danger">{{ $message }}</div>
                                         @enderror
                                     </div>
                                     <div class="form-group">
                                         <label for="weight">Weight</label>
-                                        <input value="{{ old('weight') }}" type="number" name="weight"
+                                        <input value="{{ $product->weight }}" type="number" name="weight"
                                             class="form-control" id="weight" placeholder="Describe yourself here...">
                                         @error('weight')
                                             <div class="alert alert-danger">{{ $message }}</div>
@@ -128,9 +128,9 @@
                                         <label>Status</label>
                                         <select name="status" class="custom-select">
                                             <option value="">---Please Select---</option>
-                                            <option {{ old('status') === '1' ? 'selected' : '' }} value="1">Show
+                                            <option {{ $product->status === '1' ? 'selected' : '' }} value="1">Show
                                             </option>
-                                            <option {{ old('status') === '0' ? 'selected' : '' }} value="0">Hide
+                                            <option {{ $product->status === '0' ? 'selected' : '' }} value="0">Hide
                                             </option>
                                         </select>
                                         @error('status')

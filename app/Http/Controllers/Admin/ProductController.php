@@ -18,7 +18,7 @@ class ProductController extends Controller
     public function index()
     {
         //Qury Builder
-        $products = DB::table('products')->paginate(1); //pagination page
+        $products = DB::table('products')->paginate(5); //pagination page
         return view('admin.pages.product.list', ['products' => $products]);
     }
 
@@ -36,6 +36,13 @@ class ProductController extends Controller
      */
     public function store(StoreProductRequest $request)
     {
+        if ($request->hasFile('image')) {
+            $fileOriginalName = $request->file('image')->getClientOriginalName();
+            $fileName = pathinfo($fileOriginalName, PATHINFO_FILENAME);
+            $fileName .= '_' . time() . '.' . $request->file('image')->getClientOriginalName();
+            $request->file('image')->move(public_path('images'), $fileName);
+        }
+
         // dd($request->all());
         // DB::select("insert into product ('name') VALUE (?)", [$request->name]);
 
@@ -53,6 +60,7 @@ class ProductController extends Controller
             "weight" => $request->weight,
             "status" => $request->status,
             "product_category_id" => $request->product_category_id,
+            "image" => $fileName ?? null,
             "created_at" => Carbon::now(),
             "updated_at" => Carbon::now()
         ]);
@@ -67,7 +75,9 @@ class ProductController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $product = DB::table('products')->find($id);
+        $productCategories = DB::table('product_categories')->where('status', '=', 1)->get();
+        return view('admin.pages.product.detail', ['product' => $product, 'productCategories' => $productCategories]);
     }
 
     /**
@@ -91,7 +101,16 @@ class ProductController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $product = DB::table('products')->find($id);
+        $image = $product->image;
+        if (!is_null($image) && file_exists('images/' . $image)) {
+            unlink('images/' . $image);
+        }
+        // $result = DB::table('products')->where('id', $id)->first();
+        $result = DB::table('products')->delete($id);
+        $message = $result ? 'xoa san pham thanh cong' : 'xoa san pham that bai';
+        //session flash
+        return redirect()->route('admin.product.index')->with('message', $message);
     }
     public function createSlug(Request $request)
     {

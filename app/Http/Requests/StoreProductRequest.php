@@ -32,7 +32,8 @@ class StoreProductRequest extends FormRequest
             'name.required' => 'Ten buoc phai nhap',
             'name.min' => 'Ten phai tren 3 ky tu',
             'name.max' => 'Ten phai duoi 255 ky tu',
-            'status.required' => 'Trang thai buoc phai chon!'
+            'status.required' => 'Trang thai buoc phai chon!',
+            'image' => 'image|mimes:jpeg,png,jpg,gif,svg', 'max:2048'
         ];
     }
 }
