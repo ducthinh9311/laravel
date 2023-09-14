@@ -155,8 +155,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="image">Image</label>
-                                        <input value="{{ old('image') }}" type="file" name="image"
-                                            class="form-control" id="image" placeholder="Describe yourself here...">
+                                        <input type="file" name="image" class="form-control" id="image">
                                         @error('image')
                                             <div class="alert alert-danger">{{ $message }}</div>
                                         @enderror

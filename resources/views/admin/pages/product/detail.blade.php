@@ -30,25 +30,15 @@
                             <div class="card-header">
                                 <h3 class="card-title">Add</h3>
                             </div>
-                            <!-- /.card-header -->
-                            <!-- In toàn bộ lỗi ra -->
-                            {{-- @if ($errors->any())
-                                <div class="alert alert-danger">
-                                    <ul>
-                                        @foreach ($errors->all() as $error)
-                                            <li>{{ $error }}</li>
-                                        @endforeach
-                                    </ul>
-                                </div>
-                            @endif --}}
+
                             <!-- form start -->
-                            <form role="form" method="post" action="{{ route('admin.product.detail') }}"
+                            <form role="form" method="post" action="{{ route('admin.product.store') }}"
                                 enctype="multipart/form-data">
                                 @csrf
                                 <div class="card-body">
                                     <div class="form-group">
                                         <label for="name">Name</label>
-                                        <input value="{{ $product->name }}" type="text" name="name"
+                                        <input value="{{ $product->name }}" type="text" n ame="name"
                                             class="form-control" id="name" placeholder="Enter name">
                                         @error('name')
                                             <div class="alert alert-danger">{{ $message }}</div>
@@ -123,6 +113,7 @@
                                             <div class="alert alert-danger">{{ $message }}</div>
                                         @enderror
                                     </div>
+
                                     <div class="form-group">
                                         <!-- select -->
                                         <label>Status</label>
@@ -155,8 +146,8 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="image">Image</label>
-                                        <input value="{{ old('image') }}" type="file" name="image"
-                                            class="form-control" id="image" placeholder="Describe yourself here...">
+                                        <input type="file" name="image" class="form-control" id="image"
+                                            placeholder="Describe yourself here...">
                                         @error('image')
                                             <div class="alert alert-danger">{{ $message }}</div>
                                         @enderror

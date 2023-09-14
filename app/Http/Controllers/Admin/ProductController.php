@@ -18,7 +18,7 @@ class ProductController extends Controller
     public function index()
     {
         //Qury Builder
-        $products = DB::table('products')->paginate(5); //pagination page
+        $products = DB::table('products')->orderBy('created_at', 'desc')->paginate(5); //pagination page
         return view('admin.pages.product.list', ['products' => $products]);
     }
 
