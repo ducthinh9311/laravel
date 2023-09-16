@@ -45,11 +45,12 @@
                                             <th>Name</th>
                                             <th>Price</th>
                                             <th>Image</th>
-                                            <th>Short Description</th>
+                                            {{-- <th>Short Description</th> --}}
                                             <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
+
                                         @forelse ($products as $product)
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
@@ -62,21 +63,21 @@
                                                     <img src="{{ $imagesLink }}" alt="{{ $product->name }}" width="100px"
                                                         height="100px" " />
 
-                                                                                                                                                                                                                                        </td>
-                                                                                                                                                                                                                                        <td>{!! $product->short_description !!}</td>
-                                                                                                                                                                                                                                        <td>
-                                                                                                                                                                                                                                            <form action="{{ route('admin.product.destroy', ['product' => $product->id]) }}" method="post">
-                                                                                                                                                                                                                                                @csrf
-                                                                                                                                                                                                                                                @method('delete')
-                                                                                                                                                                                                                                                <button onclick="return confirm('Are You Sure?')" type="submit" name="submit" class="btn btn-danger" >Delete</button>
-                                                                                                                                                                                                                                            </form>
-                                                                                                                                                                                                                                            <a href="{{ route('admin.product.show', ['product' => $product->id]) }}" class="btn btn-primary" >Edit</a>
+                                                                                                                                                                                                                                                                </td>
+                                                                                                                                                                                                                                                                {{-- <td>{!! $product->short_description !!}</td> --}}
+                                                                                                                                                                                                                                                                <td>
+                                                                                                                                                                                                                                                                    <form action="{{ route('admin.product.destroy', ['product' => $product->id]) }}" method="post">
+                                                                                                                                                                                                                                                                        @csrf
+                                                                                                                                                                                                                                                                        @method('delete')
+                                                                                                                                                                                                                                                                        <button onclick="return confirm('Are You Sure?')" type="submit" name="submit" class="btn btn-danger" >Delete</button>
+                                                                                                                                                                                                                                                                    </form>
+                                                                                                                                                                                                                                                                    <a href="{{ route('admin.product.show', ['product' => $product->id]) }}" class="btn btn-primary" >Edit</a>
 
-                                                                                                                                                                                                                                    </tr>
+                                                                                                                                                                                                                                                            </tr>
                                         @empty
-                                                                                                                                                                                                                                    <tr>
-                                                                                                                                                                                                                                        <td colspan="4">No data</td>
-                                                                                                                                                                                                                                    </tr>
+                                                                                                                                                                                                                                                            <tr>
+                                                                                                                                                                                                                                                                <td colspan="4">No data</td>
+                                                                                                                                                                                                                                                            </tr>
      @endforelse
 
 

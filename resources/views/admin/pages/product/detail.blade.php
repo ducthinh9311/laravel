@@ -32,9 +32,10 @@
                             </div>
 
                             <!-- form start -->
-                            <form role="form" method="post" action="{{ route('admin.product.store') }}"
+                            <form role="form" method="post"
+                                action="{{ route('admin.product.update', ['product' => $product->id]) }}"
                                 enctype="multipart/form-data">
-                                @csrf
+
                                 <div class="card-body">
                                     <div class="form-group">
                                         <label for="name">Name</label>
@@ -119,9 +120,9 @@
                                         <label>Status</label>
                                         <select name="status" class="custom-select">
                                             <option value="">---Please Select---</option>
-                                            <option {{ $product->status === '1' ? 'selected' : '' }} value="1">Show
+                                            <option {{ $product->status == '1' ? 'selected' : '' }} value="1">Show
                                             </option>
-                                            <option {{ $product->status === '0' ? 'selected' : '' }} value="0">Hide
+                                            <option {{ $product->status == '0' ? 'selected' : '' }} value="0">Hide
                                             </option>
                                         </select>
                                         @error('status')
@@ -135,7 +136,9 @@
                                         <select name="product_category_id" class="custom-select">
                                             <option value="">---Please Select---</option>
                                             @foreach ($productCategories as $productCategory)
-                                                <option value="{{ $productCategory->id }}">{{ $productCategory->name }}
+                                                <option
+                                                    {{ $productCategory->id === $product->product_category_id ? 'selected' : '' }}
+                                                    value="{{ $productCategory->id }}">{{ $productCategory->name }}
                                                 </option>
                                             @endforeach
                                         </select>
@@ -153,9 +156,10 @@
                                         @enderror
                                     </div>
                                     <div class="card-footer">
-                                        <button type="submit" class="btn btn-primary">Create</button>
+                                        <button type="submit" class="btn btn-primary">Update</button>
                                     </div>
                                     @csrf
+                                    @method('put')
                             </form>
                         </div>
                         <!-- /.card -->
@@ -164,12 +168,16 @@
                     @section('js-custom')
                         <script>
                             ClassicEditor
-                                .create(document.querySelector('#description'))
+                                .create(document.querySelector('#short_description'), {
+                                    ckfinder: {
+                                        uploadUrl: '{{ route('admin.product.ckedit.upload.image') . '?_token=' . csrf_token() }}'
+                                    }
+                                })
                                 .catch(error => {
                                     console.error(error);
                                 });
                             ClassicEditor
-                                .create(document.querySelector('#short_description'))
+                                .create(document.querySelector('#description'))
                                 .catch(error => {
                                     console.error(error);
                                 });

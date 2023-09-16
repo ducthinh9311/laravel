@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use App\Http\Requests\StoreProductRequest;
 use Carbon\Carbon;
-
+use App\Http\Requests\UpdateProductRequest;
 
 class ProductController extends Controller
 {
@@ -17,8 +17,16 @@ class ProductController extends Controller
      */
     public function index()
     {
+        //SELECT products.*, product_categories.name as product_category_name FROM `products`
+        //LEFT JOIN product_categories ON products.product_category_id = product_categories.id
+        //ORDER BY created_at desc
+        //LIMIT 0,3
+
         //Qury Builder
-        $products = DB::table('products')->orderBy('created_at', 'desc')->paginate(5); //pagination page
+        $products = DB::table('products')
+            ->select('products.*', 'product_categories.name as product_category_name')
+            ->leftjoin('product_categories', 'products.product_category_id', '=', 'product_categories.id')
+            ->orderBy('created_at', 'desc')->paginate(5); //pagination page
         return view('admin.pages.product.list', ['products' => $products]);
     }
 
@@ -91,9 +99,42 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateProductRequest $request, string $id)
     {
-        //
+        $product = DB::table('products')->find($id);
+        $oldImageFileName = $product->image;
+
+        if ($request->hasFile('image')) {
+            $fileOriginalName = $request->file('image')->getClientOriginalName();
+            $fileName = pathinfo($fileOriginalName, PATHINFO_FILENAME);
+            $fileName .= '_' . time() . '.' . $request->file('image')->getClientOriginalName();
+            $request->file('image')->move(public_path('images'), $fileName);
+
+            if (!is_null($oldImageFileName) && file_exists('images/' . $oldImageFileName)) {
+                unlink('images/' . $oldImageFileName);
+            }
+        }
+
+        //Query Builder
+        $check = DB::table('products')->where('id', '=', $id)->update([
+            "name" => $request->name,
+            "slug" => $request->slug,
+            "price" => $request->price,
+            "discount_price" => $request->discount_price,
+            "short_description" => $request->short_description,
+            "information" => $request->information,
+            "description" => $request->description,
+            "qty" => $request->qty,
+            "shipping" => $request->shipping,
+            "weight" => $request->weight,
+            "status" => $request->status,
+            "product_category_id" => $request->product_category_id,
+            "image" => $fileName ?? $oldImageFileName,
+            "updated_at" => Carbon::now()
+        ]);
+        $message = $check ? 'update san pham thanh cong' : 'update san pham that bai';
+
+        return redirect()->route('admin.product.index')->with('message', $message);
     }
 
     /**
@@ -123,5 +164,18 @@ class ProductController extends Controller
 
         //Helper string
         return response()->json(['slug' => Str::slug($request->name, '-')]);
+    }
+    public function uploadImage(Request $request)
+    {
+        if ($request->hasFile('upload')) {
+            $fileOriginalName = $request->file('upload')->getClientOriginalName();
+            $fileName = pathinfo($fileOriginalName, PATHINFO_FILENAME);
+            $fileName .= '_' . time() . '.' . $request->file('upload')->getClientOriginalExtension();
+
+            $request->file('upload')->move(public_path('images'), $fileName);
+
+            $url = asset('images/' . $fileName);
+            return response()->json(['fileName' => $fileName, 'uploaded' => 1, 'url' => $url]);
+        }
     }
 }

@@ -172,12 +172,16 @@
                     @section('js-custom')
                         <script>
                             ClassicEditor
-                                .create(document.querySelector('#description'))
+                                .create(document.querySelector('#short_description'), {
+                                    ckfinder: {
+                                        uploadUrl: '{{ route('admin.product.ckedit.upload.image') . '?_token=' . csrf_token() }}'
+                                    }
+                                })
                                 .catch(error => {
                                     console.error(error);
                                 });
                             ClassicEditor
-                                .create(document.querySelector('#short_description'))
+                                .create(document.querySelector('#description'))
                                 .catch(error => {
                                     console.error(error);
                                 });
