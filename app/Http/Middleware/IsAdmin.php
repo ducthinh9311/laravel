@@ -29,6 +29,8 @@ class IsAdmin
         //     //Not login
         //     return redirect()->route('login');
         // }
+
+
         if (Auth::check() && Auth::user()->role) {
             return $next($request); //để chạy
         }

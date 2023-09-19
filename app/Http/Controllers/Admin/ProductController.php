@@ -155,11 +155,11 @@ class ProductController extends Controller
         // $result = DB::table('products')->delete($id);
 
         //Eloquent
-        $result = Product::find((int)$id)->delete();
+        $productData = Product::find((int)$id);
+        $productData->delete();
 
-        $message = $result ? 'xoa san pham thanh cong' : 'xoa san pham that bai';
         //session flash
-        return redirect()->route('admin.product.index')->with('message', $message);
+        return redirect()->route('admin.product.index')->with('message', 'xoa san pham thanh cong');
     }
     public function createSlug(Request $request)
     {

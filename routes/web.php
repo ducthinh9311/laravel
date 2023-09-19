@@ -58,9 +58,10 @@ require __DIR__ . '/auth.php';
 
 
 
-Route::get('master', function () {
-    return view('client.layout.master');
-});
+// Route::get('master', function () {
+//     return view('client.layout.master');
+// });
+
 
 
 Route::prefix('admin')->middleware('auth.admin')->name('admin.')->group(function () {
