@@ -174,6 +174,7 @@
                             ClassicEditor
                                 .create(document.querySelector('#short_description'), {
                                     ckfinder: {
+                                        // Upload the images to the server using the CKFinder QuickUpload command.
                                         uploadUrl: '{{ route('admin.product.ckedit.upload.image') . '?_token=' . csrf_token() }}'
                                     }
                                 })

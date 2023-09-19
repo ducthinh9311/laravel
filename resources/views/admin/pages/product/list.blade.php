@@ -38,13 +38,14 @@
                             </div>
                             <!-- /.card-header -->
                             <div class="card-body">
-                                <table class="table table-bordered">
+                                <table id="table-product" class="table table-bordered">
                                     <thead>
                                         <tr>
                                             <th style="width: 10px">#</th>
                                             <th>Name</th>
                                             <th>Price</th>
                                             <th>Image</th>
+                                            <th>Product Category Name</th>
                                             {{-- <th>Short Description</th> --}}
                                             <th>Action</th>
                                         </tr>
@@ -63,21 +64,22 @@
                                                     <img src="{{ $imagesLink }}" alt="{{ $product->name }}" width="100px"
                                                         height="100px" " />
 
-                                                                                                                                                                                                                                                                </td>
-                                                                                                                                                                                                                                                                {{-- <td>{!! $product->short_description !!}</td> --}}
-                                                                                                                                                                                                                                                                <td>
-                                                                                                                                                                                                                                                                    <form action="{{ route('admin.product.destroy', ['product' => $product->id]) }}" method="post">
-                                                                                                                                                                                                                                                                        @csrf
-                                                                                                                                                                                                                                                                        @method('delete')
-                                                                                                                                                                                                                                                                        <button onclick="return confirm('Are You Sure?')" type="submit" name="submit" class="btn btn-danger" >Delete</button>
-                                                                                                                                                                                                                                                                    </form>
-                                                                                                                                                                                                                                                                    <a href="{{ route('admin.product.show', ['product' => $product->id]) }}" class="btn btn-primary" >Edit</a>
+                                                                                                                                                                                                                                                                                                                                                    </td>
+                                                                                                                                                                                                                                                                                                                                                    {{-- <td>{!! $product->short_description !!}</td> --}}
+                                                                                                                                                                                                                                                                                                                                                    <td>{{ $product->product_category_name }}</td>
+                                                                                                                                                                                                                                                                                                                                                    <td>
+                                                                                                                                                                                                                                                                                                                                                        <form action="{{ route('admin.product.destroy', ['product' => $product->id]) }}" method="post">
+                                                                                                                                                                                                                                                                                                                                                            @csrf
+                                                                                                                                                                                                                                                                                                                                                            @method('delete')
+                                                                                                                                                                                                                                                                                                                                                            <button onclick="return confirm('Are You Sure?')" type="submit" name="submit" class="btn btn-danger" >Delete</button>
+                                                                                                                                                                                                                                                                                                                                                        </form>
+                                                                                                                                                                                                                                                                                                                                                        <a href="{{ route('admin.product.show', ['product' => $product->id]) }}" class="btn btn-primary" >Edit</a>
 
-                                                                                                                                                                                                                                                            </tr>
+                                                                                                                                                                                                                                                                                                                                                </tr>
                                         @empty
-                                                                                                                                                                                                                                                            <tr>
-                                                                                                                                                                                                                                                                <td colspan="4">No data</td>
-                                                                                                                                                                                                                                                            </tr>
+                                                                                                                                                                                                                                                                                                                                                <tr>
+                                                                                                                                                                                                                                                                                                                                                    <td colspan="4">No data</td>
+                                                                                                                                                                                                                                                                                                                                                </tr>
      @endforelse
 
 
@@ -86,7 +88,7 @@
                             </div>
                             <!-- /.card-body -->
                             <div class="card-footer clearfix">
-                                {{ $products->links('pagination::bootstrap-4') }}
+                                {{-- {{ $products->links('pagination::bootstrap-4') }} --}}
                                 {{-- <ul class="pagination pagination-sm m-0 float-right">
                                     <li class="page-item"><a class="page-link" href="#">&laquo;</a></li>
                                     <li class="page-item"><a class="page-link" href="#">1</a></li>
@@ -103,4 +105,13 @@
         </section>
         <!-- /.content -->
     </div>
+@endsection
+
+@section('js-custom')
+    <script type="text/javascript">
+        // let table = new DataTable('#table-product');
+        $('#table-product').dataTable({
+            "pageLength": 3
+        });
+    </script>
 @endsection
