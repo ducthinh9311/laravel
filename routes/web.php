@@ -2,8 +2,8 @@
 
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\Admin\ProductCategory;
-
+use App\Http\Controllers\Admin\ProductCategoryController;
+use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -66,30 +66,25 @@ require __DIR__ . '/auth.php';
 
 Route::prefix('admin')->middleware('auth.admin')->name('admin.')->group(function () {
 
+    //Client
+
+
     //user
     Route::get('user', [UserController::class, 'index'])->name('user.list');
 
     //product category
-    Route::get('product_category', [ProductCategory::class, 'index'])->name('product_category.list');
-    Route::get('product_category/add', [ProductCategory::class, 'add'])->name('product_category.add');
-    Route::post('product_category/store', [ProductCategory::class, 'store'])->name('product_category.store');
-    Route::get('product_category/{id}', [ProductCategory::class, 'detail'])->name('product_category.detail');
-    Route::post('product_category/update{id}', [ProductCategory::class, 'update'])->name('product_category.update');
-    Route::get('produc_category/destroy{id}', [ProductCategory::class, 'destroy'])->name('product_category.destroy');
+    Route::get('product_category', [ProductCategoryController::class, 'index'])->name('product_category.list');
+    Route::get('product_category/add', [ProductCategoryController::class, 'add'])->name('product_category.add');
+    Route::post('product_category/store', [ProductCategoryController::class, 'store'])->name('product_category.store');
+    Route::get('product_category/{product_category}', [ProductCategoryController::class, 'detail'])->name('product_category.detail');
+    Route::post('product_category/update{product_category}', [ProductCategoryController::class, 'update'])->name('product_category.update');
+    Route::get('produc_category/destroy{product_category}', [ProductCategoryController::class, 'destroy'])->name('product_category.destroy');
 
     //product
     // Route::get('product', [ProductController::class, 'index'])->name('product.list');
     Route::resource('product', ProductController::class);
+    Route::get('product/{product}/restore',[ProductController::class,'restore'])->name('product.restore');
     Route::post('product/slug', [ProductController::class, 'createSlug'])->name('product.create.slug');
     Route::post('product/ckeditor-upload-image', [ProductController::class, 'uploadImage'])->name('product.ckedit.upload.image');
 });
-Route::get('test', function () {
-    return '<h1>Text</h1>';
-})->middleware('auth.admin');
-
-Route::get('7up', function () {
-    return '7up';
-})->middleware('age.18');
-Route::get('chivas', function () {
-    return 'chivas';
-})->middleware('age.18');
+Route::get('product-list',[HomeController::class,'index'])->name('home.index');

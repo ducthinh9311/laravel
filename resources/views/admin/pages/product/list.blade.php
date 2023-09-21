@@ -32,7 +32,6 @@
                                     </div>
                                     <div class="col-md-4 text-right">
                                         <a class="btn btn-primary" href="{{ route('admin.product.create') }}">Add</a>
-
                                     </div>
                                 </div>
                             </div>
@@ -51,7 +50,6 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-
                                         @forelse ($products as $product)
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
@@ -61,34 +59,40 @@
                                                     @php
                                                         $imagesLink = is_null($product->image) || !file_exists('images/' . $product->image) ? 'https://phutungnhapkhauchinhhang.com/wp-content/uploads/2020/06/default-thumbnail.jpg' : asset('images/' . $product->image);
                                                     @endphp
-                                                    <img src="{{ $imagesLink }}" alt="{{ $product->name }}" width="100px"
-                                                        height="100px" " />
-
-                                                                                                                                                                                                                                                                                                                                                                </td>
-                                                                                                                                                                                                                                                                                                                                                                {{-- <td>{!! $product->short_description !!}</td> --}}
-                                                                                                                                                                                                                                                                                                                                                                <td>{{ $product->product_category_name }}</td>
-                                                                                                                                                                                                                                                                                                                                                                <td>
-                                                                                                                                                                                                                                                                                                                                                                    <form action="{{ route('admin.product.destroy', ['product' => $product->id]) }}" method="post">
-                                                                                                                                                                                                                                                                                                                                                                        @csrf
-                                                                                                                                                                                                                                                                                                                                                                        @method('delete')
-                                                                                                                                                                                                                                                                                                                                                                        <button onclick="return confirm('Are You Sure?')" type="submit" name="submit" class="btn btn-danger" >Delete</button>
-                                                                                                                                                                                                                                                                                                                                                                    </form>
-                                                                                                                                                                                                                                                                                                                                                                    <a href="{{ route('admin.product.show', ['product' => $product->id]) }}" class="btn btn-primary" >Edit</a>
-
-                                                                                                                                                                                                                                                                                                                                                            </tr>
+                                                    <img src="{{ $imagesLink }}" alt="{{ $product->name }}" width="150"
+                                                        height="150" />
+                                                </td>
+                                                {{-- <td>{!! $product->short_description !!}</td> --}}
+                                                {{-- <td>{{ $product->product_category_name }}</td> --}}
+                                                <td>{{ $product->product_category->name }}</td>
+                                                <td>
+                                                    <form
+                                                        action="{{ route('admin.product.destroy', ['product' => $product->id]) }}"
+                                                        method="post">
+                                                        @csrf
+                                                        @method('delete')
+                                                        <button onclick="return confirm('Are you sure ?')" type="submit"
+                                                            class="btn btn-danger" name="sumbit">Delete</button>
+                                                    </form>
+                                                    <a href="{{ route('admin.product.show', ['product' => $product->id]) }}"
+                                                        class="btn btn-primary">Edit</a>
+                                                    @if (!is_null($product->deleted_at))
+                                                        <a href="{{ route('admin.product.restore', ['product' => $product->id]) }}"
+                                                            class="btn btn-primary">Restore</a>
+                                                    @endif
+                                                </td>
+                                            </tr>
                                         @empty
-                                                                                                                                                                                                                                                                                                                                                            <tr>
-                                                                                                                                                                                                                                                                                                                                                                <td colspan="4">No data</td>
-                                                                                                                                                                                                                                                                                                                                                            </tr>
-     @endforelse
-
-
+                                            <tr>
+                                                <td colspan="4">No data</td>
+                                            </tr>
+                                        @endforelse
                                     </tbody>
                                 </table>
                             </div>
                             <!-- /.card-body -->
                             <div class="card-footer clearfix">
-                                {{-- {{ $products->links('pagination::bootstrap-4') }} --}}
+                                {{ $products->links('pagination::bootstrap-5') }}
                                 {{-- <ul class="pagination pagination-sm m-0 float-right">
                                     <li class="page-item"><a class="page-link" href="#">&laquo;</a></li>
                                     <li class="page-item"><a class="page-link" href="#">1</a></li>
