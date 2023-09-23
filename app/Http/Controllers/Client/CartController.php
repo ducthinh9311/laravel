@@ -9,9 +9,9 @@ use Illuminate\Http\Request;
 class CartController extends Controller
 {
     public function addToCart($productId){
+        $cart = session()->get('cart') ?? [];
         $product = Product::find($productId);
         $imagesLink = is_null($product->image) || !file_exists('images/' . $product->image) ? 'https://phutungnhapkhauchinhhang.com/wp-content/uploads/2020/06/default-thumbnail.jpg' : asset('images/' . $product->image);
-        $cart = session()->get('cart') ?? [];
         $cart[$productId] = [
             'name' => $product->name,
             'price' => $product->price,

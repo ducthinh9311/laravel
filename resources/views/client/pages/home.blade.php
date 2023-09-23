@@ -393,7 +393,7 @@
                         // console.log(response);
                         Swal.fire({
                             icon: 'Success',
-                            text: 'Success!',
+                            text: response.message,
                         })
                     }
                 })

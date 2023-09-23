@@ -42,7 +42,7 @@
                             </div>
                             <!-- /.card-header -->
                             <div class="card-body">
-                                <table id="table-product" class="table table-bordered">
+                                <table id="table-pr oduct" class="table table-bordered">
                                     <thead>
                                         <tr>
                                             <th style="width: 10px">#</th>

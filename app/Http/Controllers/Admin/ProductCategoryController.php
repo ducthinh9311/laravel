@@ -56,7 +56,10 @@ class ProductCategoryController extends Controller
         ->paginate(config('my-config.item-per-pages'));
         return view(
             'admin.pages.product_category.list',
-            ['productCategories' => $productCategories, 'keyword' => $keyword, 'sortBy' => $sortBy]
+            ['productCategories' => $productCategories,
+             'keyword' => $keyword, 
+             'sortBy' => $sortBy
+             ]
         );
     }
     public function add()

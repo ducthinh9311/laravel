@@ -55,7 +55,7 @@
                                     </div>
                                     <div class="col-md-12 text-right ">
                                         <a class="btn btn-primary" href="{{ route('admin.product_category.add') }}">Add</a>
-                                        @csrf
+                                       
                                     </div>
                                 </div>
                             </div>
