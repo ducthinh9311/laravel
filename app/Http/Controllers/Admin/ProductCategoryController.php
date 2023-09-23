@@ -52,7 +52,6 @@ class ProductCategoryController extends Controller
         //Eloquent
         // $productCategories = ProductCategory::paginate(config('my-config.item-per-pages'));
         $productCategories = ProductCategory::where($filter)
-        ->where('status', $status)
         ->orderBy('created_at', $sort)
         ->paginate(config('my-config.item-per-pages'));
         return view(

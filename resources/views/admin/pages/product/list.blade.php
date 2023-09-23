@@ -15,6 +15,11 @@
                             <li class="breadcrumb-item active">Product List</li>
                         </ol>
                     </div>
+                    @if (session('message'))
+                        <div class="col-sm-12 alert alert-success">
+                            {{ session('message') }}
+                        </div>
+                    @endif
                 </div>
             </div><!-- /.container-fluid -->
         </section>
@@ -63,8 +68,8 @@
                                                         height="150" />
                                                 </td>
                                                 {{-- <td>{!! $product->short_description !!}</td> --}}
-                                                {{-- <td>{{ $product->product_category_name }}</td> --}}
-                                                <td>{{ $product->product_category->name }}</td>
+                                                <td>{{ $product->product_category_name }}</td>
+                                                {{-- <td>{{ $product->product_category->name }}</td> --}}
                                                 <td>
                                                     <form
                                                         action="{{ route('admin.product.destroy', ['product' => $product->id]) }}"
@@ -78,7 +83,7 @@
                                                         class="btn btn-primary">Edit</a>
                                                     @if (!is_null($product->deleted_at))
                                                         <a href="{{ route('admin.product.restore', ['product' => $product->id]) }}"
-                                                            class="btn btn-primary">Restore</a>
+                                                            class="btn btn-success">Restore</a>
                                                     @endif
                                                 </td>
                                             </tr>
@@ -92,7 +97,7 @@
                             </div>
                             <!-- /.card-body -->
                             <div class="card-footer clearfix">
-                                {{ $products->links('pagination::bootstrap-5') }}
+                                {{ $products->links() }}
                                 {{-- <ul class="pagination pagination-sm m-0 float-right">
                                     <li class="page-item"><a class="page-link" href="#">&laquo;</a></li>
                                     <li class="page-item"><a class="page-link" href="#">1</a></li>
@@ -114,8 +119,8 @@
 @section('js-custom')
     <script type="text/javascript">
         // let table = new DataTable('#table-product');
-        $('#table-product').dataTable({
-            "pageLength": 3
-        });
+        // $('#table-product').dataTable({
+        //     "pageLength": 3
+        // });
     </script>
 @endsection

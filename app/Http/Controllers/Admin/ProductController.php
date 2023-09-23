@@ -28,6 +28,7 @@ class ProductController extends Controller
         // $products = DB::table('products')
         //     ->select('products.*', 'product_categories.name as product_category_name')
         //     ->leftJoin('product_categories', 'products.product_category_id', '=', 'product_categories.id')
+        //     ->whereNull('deleted_at')
         //     ->orderBy('created_at', 'desc')
         //     // ->paginate(config('my-config.item-per-pages')) //pagination page
         //     ->get();
