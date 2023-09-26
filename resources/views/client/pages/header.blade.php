@@ -133,10 +133,15 @@
                                      id="total-items-cart">{{ count(session()->get('cart', [])) }}</span></a></li>
                      </ul>
                      @php
-                         $cart = sesion()->get('cart', []);
-                         $total = $total += $item['price'] * $item['qty'];
+                         $cart = session()->get('cart', []);
+                         $total = 0;
+                         foreach ($cart as $item) {
+                             $total += $item['price'] * $item['qty'];
+                         }
                      @endphp
-                     <div class="header__cart__price">item: <span>$150.00</span></div>
+                     <div class="header__cart__price" id="total-price-cart">item:
+                         <span>${{ number_format($total, 2) }}</span>
+                     </div>
                  </div>
              </div>
          </div>

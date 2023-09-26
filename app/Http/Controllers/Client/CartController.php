@@ -30,7 +30,7 @@ class CartController extends Controller
     ]);
     }
 
-    public function calculateTotalPrice($cart):float{
+    public function calculateTotalPrice($cart): float{
         $total = 0;
         foreach($cart as $item){
             $total += $item['price'] * $item['qty'];

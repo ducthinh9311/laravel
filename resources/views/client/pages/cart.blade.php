@@ -41,9 +41,7 @@
                                     $total = 0;
                                 @endphp
                                 @foreach ($cart as $productId => $item)
-                                    @php
-                                        $total = $item['qty'] * $item['price'];
-                                    @endphp
+                                    @php $total += $item['qty'] * $item['price'] @endphp
                                     <tr id="{{ $productId }}">
                                         <td class="shoping__cart__item">
                                             <img src="{{ $item['image'] ?? '' }}" alt="">
@@ -66,7 +64,7 @@
                                         </td>
                                         <td class="shoping__cart__item__close">
                                             <span data-id="{{ $productId }}"
-                                                data-url="{{ route('product.add-item-in-cart', ['productId' => $productId]) }}"
+                                                data-url="{{ route('product.delete-item-in-cart', ['productId' => $productId]) }}"
                                                 class="icon_close"></span>
                                         </td>
                                     </tr>
@@ -99,8 +97,8 @@
                     <div class="shoping__checkout">
                         <h5>Cart Total</h5>
                         <ul>
-                            <li>Subtotal <span>$454.98</span></li>
-                            <li>Total <span>$454.98</span></li>
+                            <li>Subtotal <span>${{ number_format($total, 2) }}</span></li>
+                            <li>Total <span>${{ number_format($total, 2) }}</span></li>
                         </ul>
                         <a href="#" class="primary-btn">PROCEED TO CHECKOUT</a>
                     </div>
@@ -121,24 +119,25 @@
                     url: url,
                     success: function(response) {
                         Swal.fire({
-                            icon: 'Success',
+                            icon: 'success',
                             text: response.message,
                         });
-                        $('tr#' + id).empty(); //Xoa Item
+                        $('tr#' + id).empty();
                     }
                 });
             });
-            $('.qtybtn').on('click', function() { //Update Item
+
+            $('.qtybtn').on('click', function() {
+
 
                 var button = $(this);
                 var id = button.parent().data('id');
-                var price = parseFloat(button.parent().data('.price'));
+
                 var qty = parseInt(button.siblings('.qty').val());
-
-
                 var url = button.parent().data('url');
 
-                var totalPrice = price * qty;
+
+
 
                 if (button.hasClass('inc')) {
                     qty += 1;
@@ -146,7 +145,8 @@
                     qty = (qty < 0) ? 0 : (qty -= 1);
                 }
 
-
+                var price = parseFloat(button.parent().data('price'));
+                var totalPrice = price * qty;
 
                 url += '/' + qty;
 
@@ -155,25 +155,26 @@
                     url: url,
                     success: function(response) {
                         Swal.fire({
-                            icon: 'Success',
+                            icon: 'success',
                             text: response.message,
                         });
                         if (qty === 0) {
                             $('tr#' + id).empty();
                         }
+
                         $('tr#' + id + ' .shoping__cart__total').html("$" + totalPrice.toFixed(
                                 2)
-                            .repalce(
-                                /(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"
-                            ));
-                        $('$total-items-cart').html(response.total_items);
-                        $('$total-prices-cart').html('$'.response.total_prices.toFixed(2)
-                            .repalce(
-                                /(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"
-                            ));
+                            .replace(
+                                /(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"));
+                        $('#total-items-cart').html(response.total_items);
+                        $('#total-price-cart').html('$' + response.total_price.toFixed(2)
+                            .replace(
+                                /(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"));
                     }
-                })
-            })
+                });
+            });
+
+
         });
     </script>
 @endsection
