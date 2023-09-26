@@ -95,6 +95,6 @@ Route::prefix('admin')->middleware('auth.admin')->name('admin.')->group(function
 Route::get('/',[HomeController::class,'index'])->name('home.index');
 Route::get('product/add-to-cart/{productId}',[CartController::class, 'addToCart'])->name('product.add-to-cart');
 Route::get('cart',[CartController::class,'index'])->name('cart.index');
-// Route::get('b',function(){
-//     dd(session()->get('cart'));
-// });
+Route::get('product/add-item-in-cart/{productId}',[CartController::class, 'deleteItem'])->name('product.add-item-in-cart');
+Route::get('product/update-item-in-cart/{productId}/{qty?}', [CartController::class,'updateItemInCart'])->name('product.update-item-in-cart');
+Route::get('cart', [CartController::class,'index'])->name('cart.index');

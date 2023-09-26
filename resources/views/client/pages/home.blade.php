@@ -395,6 +395,11 @@
                             icon: 'Success',
                             text: response.message,
                         })
+                        $('$total-items-cart').html(response.total_items);
+                        $('$total-prices-cart').html('$'.response.total_prices.toFixed(2)
+                            .repalce(
+                                /(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"
+                            ));
                     }
                 })
             });

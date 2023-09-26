@@ -128,9 +128,14 @@
              <div class="col-lg-3">
                  <div class="header__cart">
                      <ul>
-                         <li><a href="#"><i class="fa fa-heart"></i> <span>1</span></a></li>
-                         <li><a href="#"><i class="fa fa-shopping-bag"></i> <span>3</span></a></li>
+                         <li><a href="#"><i class="fa fa-heart"></i> <span></span></a></li>
+                         <li><a href="#"><i class="fa fa-shopping-bag"></i> <span
+                                     id="total-items-cart">{{ count(session()->get('cart', [])) }}</span></a></li>
                      </ul>
+                     @php
+                         $cart = sesion()->get('cart', []);
+                         $total = $total += $item['price'] * $item['qty'];
+                     @endphp
                      <div class="header__cart__price">item: <span>$150.00</span></div>
                  </div>
              </div>
