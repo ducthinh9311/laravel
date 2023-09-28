@@ -10,7 +10,7 @@ class CartController extends Controller
 {
     public function addToCart($productId){
         $cart = session()->get('cart') ?? [];
-        $product = Product::find($productId);
+        $product = Product::findOrFail($productId);
         $imagesLink = is_null($product->image) || !file_exists('images/' . $product->image) ? 'https://phutungnhapkhauchinhhang.com/wp-content/uploads/2020/06/default-thumbnail.jpg' : asset('images/' . $product->image);
         $cart[$productId] = [
             'name' => $product->name,
@@ -64,5 +64,17 @@ class CartController extends Controller
         return response()->json(['message' => 'Update item success',
         'total_price' => $total_price,
         'total_items' => $total_items]);
+    }
+    public function emptycart(){
+        session()->put('cart', []);
+        return response()->json([
+            'message' => 'Cart delete success',
+            'total_price' => 0,
+            'total_items' => 0
+        ]);
+    }
+    public function checkout(){
+        $cart = session()->get('cart',[]);
+        return view('client.pages.checkout', ['cart' => $cart]);
     }
 }
