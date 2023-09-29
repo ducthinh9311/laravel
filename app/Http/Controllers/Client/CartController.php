@@ -9,25 +9,24 @@ use Illuminate\Http\Request;
 class CartController extends Controller
 {
     public function addToCart($productId){
-        $cart = session()->get('cart') ?? [];
         $product = Product::findOrFail($productId);
+        $cart = session()->get('cart') ?? [];
         $imagesLink = is_null($product->image) || !file_exists('images/' . $product->image) ? 'https://phutungnhapkhauchinhhang.com/wp-content/uploads/2020/06/default-thumbnail.jpg' : asset('images/' . $product->image);
         $cart[$productId] = [
             'name' => $product->name,
             'price' => $product->price,
             'image' => $imagesLink,
             'qty' => ($cart[$productId]['qty'] ?? 0) + 1
-
         ];
         session()->put('cart', $cart);
-        // dd(session()->get('cart') );
         $total_price = $this->calculateTotalPrice($cart);
         $total_items = count($cart);
+
         return response()->json([
-        'message' => 'Add product to cart success',
-        'total_price' => $total_price,
-        'total_items' => $total_items
-    ]);
+            'message' => 'Add product to cart success',
+            'total_price' => $total_price,
+            'total_items' => $total_items
+        ]);
     }
 
     public function calculateTotalPrice($cart): float{
@@ -37,20 +36,24 @@ class CartController extends Controller
         }
         return $total;
     }
+
     public function index(){
         $cart = session()->get('cart') ?? [];
-        return view('client.pages.cart',['cart' =>$cart]);
+        return view('client.pages.cart', ['cart' => $cart]);
     }
+
     public function deleteItem($productId){
         $cart = session()->get('cart', []);
         if(array_key_exists($productId, $cart)){
             unset($cart[$productId]);
             session()->put('cart', $cart);
         }
-        return response()->json(['message' => 'Delete item success']);
-
+        return response()->json([
+            'message' => 'Delete item success'
+        ]);
     }
-    public function updateItemInCart($productId, $qty){
+
+    public function updateItem($productId, $qty){
         $cart = session()->get('cart', []);
         if(array_key_exists($productId, $cart)){
             $cart[$productId]['qty'] = $qty;
@@ -61,11 +64,14 @@ class CartController extends Controller
         }
         $total_price = $this->calculateTotalPrice($cart);
         $total_items = count($cart);
-        return response()->json(['message' => 'Update item success',
-        'total_price' => $total_price,
-        'total_items' => $total_items]);
+        return response()->json([
+            'message' => 'Update item success',
+            'total_price' => $total_price,
+            'total_items' => $total_items
+        ]);
     }
-    public function emptycart(){
+
+    public function emptyCart(){
         session()->put('cart', []);
         return response()->json([
             'message' => 'Cart delete success',
@@ -73,8 +79,9 @@ class CartController extends Controller
             'total_items' => 0
         ]);
     }
+
     public function checkout(){
-        $cart = session()->get('cart',[]);
+        $cart = session()->get('cart', []);
         return view('client.pages.checkout', ['cart' => $cart]);
     }
 }

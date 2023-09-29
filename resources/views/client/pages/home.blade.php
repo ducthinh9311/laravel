@@ -73,7 +73,7 @@
                             </div>
                             <div class="featured__item__text">
                                 <h6><a href="#">{{ $product->name }}</a></h6>
-                                <h5>{{ number_format($product->price, 2) }}</h5>
+                                <h5>${{ number_format($product->price, 2) }}</h5>
                             </div>
                         </div>
                     </div>
@@ -385,35 +385,33 @@
             $('.add-to-cart').on('click', function(event) {
                 event.preventDefault();
                 var url = $(this).data('url');
-
                 $.ajax({
                     method: 'get', //method form
                     url: url, //action form
                     success: function(response) {
-                        // console.log(response);
+                        console.log(response);
                         Swal.fire({
-                            icon: 'Success',
+                            icon: 'success',
+                            // title: 'Notification',
                             text: response.message,
-                        })
+                        });
                         $('#total-items-cart').html(response.total_items);
-                        $('#total-price-cart').html('$' + response.total_prices.toFixed(2)
-                            .repalce(
-                                /(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"
-                            ));
-                    }
+                        $('#total-price-cart').html('$' + response.total_price.toFixed(2)
+                            .replace(
+                                /(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"));
+                    },
                     statusCode: {
                         401: function() {
-                            window.location.href = '{{ route('login') }}'
+                            window.location.href = '{{ route('login') }}';
                         },
                         404: function() {
                             Swal.fire({
                                 icon: 'error',
                                 text: "Can't add product to cart",
-                            })
-                        }
-                    }
-
-                })
+                            });
+                        },
+                    },
+                });
             });
         });
     </script>

@@ -1,7 +1,6 @@
 @extends('client.layout.master')
 
 @section('content')
-    {{-- {{ dd($cart) }} --}}
     <!-- Breadcrumb Section Begin -->
     <section class="breadcrumb-section set-bg" data-setbg="img/breadcrumb.jpg">
         <div class="container">
@@ -36,10 +35,8 @@
                                     <th></th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                @php
-                                    $total = 0;
-                                @endphp
+                            <tbody id="table-cart">
+                                @php $total = 0 @endphp
                                 @foreach ($cart as $productId => $item)
                                     @php $total += $item['qty'] * $item['price'] @endphp
                                     <tr id="{{ $productId }}">
@@ -55,7 +52,7 @@
                                                 <div class="pro-qty" data-price="{{ $item['price'] }}"
                                                     data-url="{{ route('product.update-item-in-cart', ['productId' => $productId]) }}"
                                                     data-id="{{ $productId }}">
-                                                    <input class="qty" type="text" value="{{ $item['qty'] }}">
+                                                    <input type="text" class="qty" value="{{ $item['qty'] }}">
                                                 </div>
                                             </div>
                                         </td>
@@ -78,8 +75,9 @@
                 <div class="col-lg-12">
                     <div class="shoping__cart__btns">
                         <a href="#" class="primary-btn cart-btn">CONTINUE SHOPPING</a>
-                        <a href="#" class="primary-btn cart-btn cart-btn-right"><span class="icon_loading"></span>
-                            Upadate Cart</a>
+                        <a href="#" class="primary-btn cart-btn cart-btn-right delete-cart"><span
+                                class="icon_close"></span>
+                            Delete Cart</a>
                     </div>
                 </div>
                 <div class="col-lg-6">
@@ -97,10 +95,10 @@
                     <div class="shoping__checkout">
                         <h5>Cart Total</h5>
                         <ul>
-                            <li>Subtotal <span>${{ number_format($total, 2) }}</span></li>
-                            <li>Total <span>${{ number_format($total, 2) }}</span></li>
+                            <li>Subtotal <span id="cart-subtotal">${{ number_format($total, 2) }}</span></li>
+                            <li>Total <span id="cart-total">${{ number_format($total, 2) }}</span></li>
                         </ul>
-                        <a href="#" class="primary-btn">PROCEED TO CHECKOUT</a>
+                        <a href="{{ route('checkout') }}" class="primary-btn">PROCEED TO CHECKOUT</a>
                     </div>
                 </div>
             </div>
@@ -108,6 +106,8 @@
     </section>
     <!-- Shoping Cart Section End -->
 @endsection
+
+
 @section('js-custom')
     <script>
         $(document).ready(function() {
@@ -115,8 +115,11 @@
                 var url = $(this).data('url');
                 var id = $(this).data('id');
                 $.ajax({
-                    method: 'get',
+                    method: 'post',
                     url: url,
+                    data: {
+                        'name': '1'
+                    },
                     success: function(response) {
                         Swal.fire({
                             icon: 'success',
@@ -129,15 +132,11 @@
 
             $('.qtybtn').on('click', function() {
 
-
                 var button = $(this);
                 var id = button.parent().data('id');
 
                 var qty = parseInt(button.siblings('.qty').val());
                 var url = button.parent().data('url');
-
-
-
 
                 if (button.hasClass('inc')) {
                     qty += 1;
@@ -163,18 +162,45 @@
                         }
 
                         $('tr#' + id + ' .shoping__cart__total').html("$" + totalPrice.toFixed(
-                                2)
-                            .replace(
-                                /(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"));
-                        $('#total-items-cart').html(response.total_items);
-                        $('#total-price-cart').html('$' + response.total_price.toFixed(2)
-                            .replace(
-                                /(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"));
+                            2).replace(
+                            /(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"));
+
+                        reloadView(response);
                     }
                 });
             });
 
+            $('.delete-cart').on('click', function(event) {
+                event.preventDefault();
+                $.ajax({
+                    method: 'get',
+                    url: '{{ route('product.delete-item-in-cart') }}',
+                    success: function(response) {
+                        Swal.fire({
+                            icon: 'success',
+                            text: response.message,
+                        });
 
+                        reloadView(response);
+
+                        $('#table-cart').empty();
+                    }
+                });
+            });
+
+            function reloadView(response) {
+                $('#total-items-cart').html(response.total_items);
+                $('#total-price-cart').html('$' + response.total_price.toFixed(2)
+                    .replace(
+                        /(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"));
+
+                $('#cart-subtotal').html('$' + response.total_price.toFixed(
+                    2).replace(
+                    /(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"));
+                $('#cart-total').html('$' + response.total_price.toFixed(
+                    2).replace(
+                    /(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"));
+            }
         });
     </script>
 @endsection

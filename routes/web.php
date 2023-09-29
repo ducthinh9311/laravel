@@ -1,14 +1,13 @@
 <?php
 
+use App\Http\Controllers\Admin\ProductCategoryController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\Admin\ProductCategoryController;
 use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\Client\OrderController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-
 
 /*
 |--------------------------------------------------------------------------
@@ -21,9 +20,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -35,73 +31,36 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__ . '/auth.php';
+require __DIR__.'/auth.php';
 
-//use Illuminate\Http\Request
-// //http://127.0.0.1:8000/product?name=bbb
-// Route::get('product', function(Request $request){
-//     echo 'Product List'. $request->query('name');
-// });
+Route::prefix('admin')->middleware('auth.admin')->name('admin.')->group(function(){
 
-// //http://127.0.0.1:8000/user/detail/13/nguyenvana
-// //http://127.0.0.1:8000/user/detail/13/
-// Route::get('user/detail/{id}/{name?}', function($id, $name = ''){
-//     return 'User Detail: '.$id. $name;
-// });
-// Route::get('master', function () {
-//     return view('client.layout.master');
-// });
-// Route::get('product', function () {
-//     return view('client.pages.product.list');
-// });
-// Route::get('blog', function () {
-//     return view('client.pages.blog.detail');
-// });
-
-
-
-
-// Route::get('master', function () {
-//     return view('client.layout.master');
-// });
-
-
-
-Route::prefix('admin')->middleware('auth.admin')->name('admin.')->group(function () {
-
-    //Client
-
-
-    //user
+    //User
     Route::get('user', [UserController::class, 'index'])->name('user.list');
 
-    //product category
+    //Product Category
     Route::get('product_category', [ProductCategoryController::class, 'index'])->name('product_category.list');
     Route::get('product_category/add', [ProductCategoryController::class, 'add'])->name('product_category.add');
     Route::post('product_category/store', [ProductCategoryController::class, 'store'])->name('product_category.store');
     Route::get('product_category/{product_category}', [ProductCategoryController::class, 'detail'])->name('product_category.detail');
-    Route::post('product_category/update{product_category}', [ProductCategoryController::class, 'update'])->name('product_category.update');
-    Route::get('produc_category/destroy{product_category}', [ProductCategoryController::class, 'destroy'])->name('product_category.destroy');
+    Route::post('product_category/update/{product_category}', [ProductCategoryController::class,'update'])->name('product_category.update');
+    Route::get('product_category/destroy/{product_category}', [ProductCategoryController::class, 'destroy'])->name('product_category.destroy');
 
-    //product
-    // Route::get('product', [ProductController::class, 'index'])->name('product.list');
+    //Product
     Route::resource('product', ProductController::class);
-    Route::get('product/{product}/restore',[ProductController::class,'restore'])->name('product.restore');
+    Route::get('product/{product}/restore', [ProductController::class, 'restore'])->name('product.restore');
     Route::post('product/slug', [ProductController::class, 'createSlug'])->name('product.create.slug');
     Route::post('product/ckeditor-upload-image', [ProductController::class, 'uploadImage'])->name('product.ckedit.upload.image');
 });
-
 //Client
-Route::get('/',[HomeController::class,'index'])->name('home.index');
+Route::get('/', [HomeController::class, 'index'])->name('home.index');
 
 Route::middleware('auth')->group(function(){
-
-    Route::get('product/add-to-cart/{productId}',[CartController::class, 'addToCart'])->name('product.add-to-cart');
-    Route::get('cart',[CartController::class,'index'])->name('cart.index');
-    Route::get('product/delete-item-in-cart/{productId}',[CartController::class, 'deleteItem'])->name('product.delete-item-in-cart');
-    Route::get('product/update-item-in-cart/{productId}/{qty?}', [CartController::class,'updateItemInCart'])->name('product.update-item-in-cart');
-    Route::get('product/delete-item-in-cart/',[CartController::class, 'emptycart'])->name('product.delete-item-in-cart');
+    Route::get('product/add-to-cart/{productId}', [CartController::class, 'addToCart'])->name('product.add-to-cart');
+    Route::get('product/delete-item-in-cart/{productId}', [CartController::class, 'deleteItem'])->name('product.delete-item-in-cart');
+    Route::get('product/update-item-in-cart/{productId}/{qty?}', [CartController::class, 'updateItem'])->name('product.update-item-in-cart');
+    Route::get('product/delete-item-in-cart', [CartController::class, 'emptyCart'])->name('product.delete-item-in-cart');
     Route::get('cart', [CartController::class,'index'])->name('cart.index');
-    Route::get('checkout', [CartController::class,'checkout'])->name('checkout');
-    Route::post('placeorder',[OrderController::class,'placeOrder'])->name('placeorder');
+    Route::get('checkout', [CartController::class, 'checkout'])->name('checkout');
+    Route::post('placeorder',[OrderController::class, 'placeOrder'])->name('place-order');
 });
