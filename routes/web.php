@@ -7,6 +7,8 @@ use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\Client\OrderController;
 use App\Http\Controllers\ProfileController;
+use App\Mail\MailToCustomer;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -63,4 +65,8 @@ Route::middleware('auth')->group(function(){
     Route::get('cart', [CartController::class,'index'])->name('cart.index');
     Route::get('checkout', [CartController::class, 'checkout'])->name('checkout');
     Route::post('placeorder',[OrderController::class, 'placeOrder'])->name('place-order');
+});
+
+Route::get('text-send-mail', function(){
+    //  Mail::to('ducthinh9311@gmail.com')->send(new MailToCustomer);
 });
