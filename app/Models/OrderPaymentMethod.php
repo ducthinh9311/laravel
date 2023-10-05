@@ -10,6 +10,7 @@ class OrderPaymentMethod extends Model
 {
     use HasFactory,SoftDeletes;
     const STATUS_PENDING = 'pending';
+    const STATUS_SUCCESS = 'success';
     protected $table = 'orders_payment_method';
     protected $fillable=[
         'order_id',
