@@ -12,6 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('orders', function (Blueprint $table) {
+            // $table->dropForeign('user_id');
             $table->id();
             $table->string('address', 255)->nullable();
             $table->text('note')->nullable();
@@ -26,6 +27,7 @@ return new class extends Migration
             $table->timestamps();
         });
     }
+
 
     /**
      * Reverse the migrations.

@@ -1,6 +1,6 @@
 <?php
 
-use App\Events\PlaceOrderSuccess;
+use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ProductCategoryController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\UserController;
@@ -59,7 +59,7 @@ Route::prefix('admin')->middleware('auth.admin')->name('admin.')->group(function
     Route::post('product/ckeditor-upload-image', [ProductController::class, 'uploadImage'])->name('product.ckedit.upload.image');
 
     //Dashboard
-    Route::get('/', [ProductController::class, 'index'])->name('product.ckedit.upload.image');
+    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 });
 //Client
 Route::get('/', [HomeController::class, 'index'])->name('home.index');
@@ -74,23 +74,25 @@ Route::middleware('auth')->group(function(){
     Route::post('placeorder',[OrderController::class, 'placeOrder'])->name('place-order');
     Route::get('vnpay-callback', [OrderController::class, 'vnpayCallback'])->name('vnpay-callback');
 });
+
 Route::get('google-redirect', [GoogleController::class, 'redirect'])->name('google.redirect');
 Route::get('google-callback', [GoogleController::class, 'callback'])->name('google.callback');
-Route::get('test-send-sms', function(){
-// Your Account SID and Auth Token from console.twilio.com
-$sid = env('TWILIO_ACCOUNT_SID');
-$token = env('TWILIO_AUTH_TOKEN');
-$client = new \Twilio\Rest\Client($sid, $token);
 
-// Use the Client to make requests to the Twilio REST API
-$client->messages->create(
-    // The number you'd like to send the message to
-    '+84772772394',
-    [
-        // A Twilio phone number you purchased at https://console.twilio.com
-        'from' => env('TWILIO_PHONE_NUMBER'),
-        // The body of the text message you'd like to send
-        'body' =>  "Test Send SMS"
-    ]
+Route::get('test-send-sms', function(){
+    // Your Account SID and Auth Token from console.twilio.com
+    $sid = env('TWILIO_ACCOUNT_SID');
+    $token = env('TWILIO_AUTH_TOKEN');
+    $client = new Twilio\Rest\Client($sid, $token);
+
+    // Use the Client to make requests to the Twilio REST API
+    $client->messages->create(
+        // The number you'd like to send the message to
+        '+84352405575',
+        [
+            // A Twilio phone number you purchased at https://console.twilio.com
+            'from' => env('TWILIO_PHONE_NUMBER'),
+            // The body of the text message you'd like to send
+            'body' => "Test Send SMS"
+        ]
     );
 });
