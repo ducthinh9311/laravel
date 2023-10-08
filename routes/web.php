@@ -87,7 +87,7 @@ Route::get('test-send-sms', function(){
     // Use the Client to make requests to the Twilio REST API
     $client->messages->create(
         // The number you'd like to send the message to
-        '+84352405575',
+        '+84772772394',
         [
             // A Twilio phone number you purchased at https://console.twilio.com
             'from' => env('TWILIO_PHONE_NUMBER'),
